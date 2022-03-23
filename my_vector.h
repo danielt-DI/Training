@@ -7,14 +7,15 @@
 #ifndef CPP_TRAINING_MY_VECTOR_H
 #define CPP_TRAINING_MY_VECTOR_H
 
+template <typename T>
 class my_vector {
-    int* buff;
+    T* buff;
     int vec_capacity;
     int vec_size;
 
 public:
     // constructor
-    my_vector(int capacity): vec_capacity(capacity), vec_size(0), buff(new int[capacity]) {}
+    my_vector(int capacity): vec_capacity(capacity), vec_size(0), buff(new T[capacity]) {}
 
     // copy constructor
     my_vector(const my_vector& vec);
@@ -31,23 +32,25 @@ public:
     // vector interface
     int size() {return vec_size;}
     int capacity() {return vec_capacity;}
-    void push_back(int elem);
+    void push_back(T elem);
     void print();
 };
 
 // copy constructor
-my_vector::my_vector(const my_vector &vec): vec_capacity(vec.vec_capacity), vec_size(vec.vec_size), buff(new int[vec.vec_capacity]) {
+template <typename T>
+my_vector<T>::my_vector(const my_vector &vec): vec_capacity(vec.vec_capacity), vec_size(vec.vec_size), buff(new int[vec.vec_capacity]) {
     for(int i = 0; i < vec_size; i++) {
         buff[i] = vec.buff[i];
     }
 }
 
 // assignment operator
-my_vector& my_vector::operator=(const my_vector &vec) {
+template <typename T>
+my_vector<T>& my_vector<T>::operator=(const my_vector &vec) {
     vec_size = vec.vec_size;
     vec_capacity = vec.vec_capacity;
     delete[] buff;
-    buff = new int[vec.vec_capacity];
+    buff = new T[vec.vec_capacity];
 
     for(int i = 0; i < vec_size; i++) {
         buff[i] = vec.buff[i];
@@ -55,20 +58,23 @@ my_vector& my_vector::operator=(const my_vector &vec) {
 }
 
 // move constructor
-my_vector::my_vector(my_vector &&vec):vec_size(vec.vec_size), vec_capacity(vec.vec_capacity), buff(new int[vec.vec_capacity]) {
+template <typename T>
+my_vector<T>::my_vector(my_vector &&vec):vec_size(vec.vec_size), vec_capacity(vec.vec_capacity), buff(new T[vec.vec_capacity]) {
     vec.buff = nullptr;
 }
 
 // destructor
-my_vector::~my_vector() {
+template <typename T>
+my_vector<T>::~my_vector() {
     delete[] buff;
 }
 
 // vector interface
-void my_vector::push_back(int elem) {
+template <typename T>
+void my_vector<T>::push_back(T elem) {
     if(vec_size == vec_capacity) {
         vec_capacity *= 2;
-        int* tmp = new int[vec_capacity];
+        T* tmp = new T[vec_capacity];
 
         for(int i = 0; i < vec_size; i++) {
             tmp[i] = buff[i];
@@ -82,11 +88,11 @@ void my_vector::push_back(int elem) {
     buff[vec_size++] = elem;
 }
 
-void my_vector::print() {
+template <typename T>
+void my_vector<T>::print() {
     for(int i = 0; i < vec_size; i++) {
         std::cout << buff[i] << " ";
     }
-
     std::cout << std::endl;
 }
 

@@ -3,21 +3,31 @@
 
 int main() {
 
-    my_vector v(3);
-    std::cout << "Capacity : " << v.capacity() << std::endl;
-    v.push_back(5);
-    v.push_back(5);
-    v.push_back(5);
-    v.push_back(5);
-    std::cout << "Capacity : " << v.capacity() << std::endl;
-    v.print();
+    my_vector<int> intv(3);
+    std::cout << "Capacity : " << intv.capacity() << std::endl;
+    intv.push_back(5);
+    intv.push_back(5);
+    intv.push_back(5);
+    intv.push_back(5);
+    std::cout << "Capacity : " << intv.capacity() << std::endl;
+    intv.print();
 
     std::cout << std::endl;
 
-    my_vector vv(v);
-    vv.push_back(10);
-    vv.print();
-    v.print();
+    my_vector intvv(intv);
+    intvv.push_back(10);
+    intvv.print();
+    intv.print();
+
+    std::cout << std::endl;
+
+    my_vector<std::string> strv(2);
+    strv.push_back("Hello");
+    strv.push_back("World");
+    strv.push_back("!!");
+    strv.print();
+
+    std::cout << std::endl;
 
     std::cout << "Finished" << std::endl;
 
