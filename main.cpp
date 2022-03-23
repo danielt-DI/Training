@@ -4,10 +4,12 @@
 int main() {
 
     my_vector v(3);
+    std::cout << "Capacity : " << v.capacity() << std::endl;
     v.push_back(5);
     v.push_back(5);
     v.push_back(5);
     v.push_back(5);
+    std::cout << "Capacity : " << v.capacity() << std::endl;
     v.print();
 
     std::cout << std::endl;

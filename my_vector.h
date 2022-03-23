@@ -30,6 +30,7 @@ public:
 
     // vector interface
     int size() {return vec_size;}
+    int capacity() {return vec_capacity;}
     void push_back(int elem);
     void print();
 };
