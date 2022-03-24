@@ -13,7 +13,10 @@ struct my_struct {
     }
 };
 
+<<<<<<< HEAD
 int main() {
+=======
+>>>>>>> create a class to encapsulate file handle
 /*
     my_std_vector<int> intv(3);
     std::cout << "Capacity : " << intv.capacity() << std::endl;
