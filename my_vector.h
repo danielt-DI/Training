@@ -3,19 +3,20 @@
 //
 
 #include <iostream>
+#include <memory>
 
 #ifndef CPP_TRAINING_MY_VECTOR_H
 #define CPP_TRAINING_MY_VECTOR_H
 
 template <typename T>
 class my_vector {
-    T* buff;
+    std::unique_ptr<T[]> buff;
     int vec_capacity;
     int vec_size;
 
 public:
     // constructor
-    my_vector(int capacity): vec_capacity(capacity), vec_size(0), buff(new T[capacity]) {}
+    my_vector(int capacity): vec_capacity(capacity), vec_size(0), buff(std::make_unique<T[]>(capacity)) {}
 
     // copy constructor
     my_vector(const my_vector& vec);
@@ -27,7 +28,7 @@ public:
     my_vector(my_vector&& vec);
 
     // destructor
-    virtual ~my_vector();
+    //virtual ~my_vector(); - removed, buff is now a smart pointer.
 
     // vector interface
     int size() {return vec_size;}
@@ -38,7 +39,7 @@ public:
 
 // copy constructor
 template <typename T>
-my_vector<T>::my_vector(const my_vector &vec): vec_capacity(vec.vec_capacity), vec_size(vec.vec_size), buff(new int[vec.vec_capacity]) {
+my_vector<T>::my_vector(const my_vector &vec): vec_capacity(vec.vec_capacity), vec_size(vec.vec_size), buff(std::make_unique<T[]>(vec.vec_capacity)) {
     for(int i = 0; i < vec_size; i++) {
         buff[i] = vec.buff[i];
     }
@@ -49,8 +50,8 @@ template <typename T>
 my_vector<T>& my_vector<T>::operator=(const my_vector &vec) {
     vec_size = vec.vec_size;
     vec_capacity = vec.vec_capacity;
-    delete[] buff;
-    buff = new T[vec.vec_capacity];
+    buff.reset();
+    buff = std::make_unique<T[]>(vec.vec_capacity);
 
     for(int i = 0; i < vec_size; i++) {
         buff[i] = vec.buff[i];
@@ -59,14 +60,8 @@ my_vector<T>& my_vector<T>::operator=(const my_vector &vec) {
 
 // move constructor
 template <typename T>
-my_vector<T>::my_vector(my_vector &&vec):vec_size(vec.vec_size), vec_capacity(vec.vec_capacity), buff(new T[vec.vec_capacity]) {
+my_vector<T>::my_vector(my_vector &&vec):vec_size(vec.vec_size), vec_capacity(vec.vec_capacity), buff(std::make_unique<T[]>(vec.vec_capacity)) {
     vec.buff = nullptr;
-}
-
-// destructor
-template <typename T>
-my_vector<T>::~my_vector() {
-    delete[] buff;
 }
 
 // vector interface
@@ -74,15 +69,15 @@ template <typename T>
 void my_vector<T>::push_back(T elem) {
     if(vec_size == vec_capacity) {
         vec_capacity *= 2;
-        T* tmp = new T[vec_capacity];
+        std::unique_ptr<T[]> tmp = std::make_unique<T[]>(vec_capacity);
 
         for(int i = 0; i < vec_size; i++) {
             tmp[i] = buff[i];
         }
 
-        delete[] buff;
+        buff.reset();
 
-        buff = tmp;
+        buff = std::move(tmp);
     }
 
     buff[vec_size++] = elem;
