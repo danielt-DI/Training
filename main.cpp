@@ -1,8 +1,11 @@
 #include <iostream>
+#include <string>
 #include "my_std_vector.h"
+#include "file_handler.h"
 
 int main() {
 
+/*
     my_std_vector<int> intv(3);
     std::cout << "Capacity : " << intv.capacity() << std::endl;
     intv.push_back(5);
@@ -28,6 +31,19 @@ int main() {
     strv.print();
 
     std::cout << std::endl;
+*/
+
+    char to_print[] = "Some test text";
+    char buff[10];
+    fs::path p("/home/daniel/CLionProjects/cpp_training/test_file.txt");
+    file_handler fh(p);
+    fh.seekp(0);
+    fh.write(to_print, sizeof(to_print) - 1);
+    fh.seekg(5);
+    fh.read(buff, 4);
+    buff[4] = '\0';
+
+    std::cout << buff << std::endl;
 
     std::cout << "Finished" << std::endl;
 
