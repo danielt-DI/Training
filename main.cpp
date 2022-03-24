@@ -1,9 +1,9 @@
 #include <iostream>
-#include "my_vector.h"
+#include "my_std_vector.h"
 
 int main() {
 
-    my_vector<int> intv(3);
+    my_std_vector<int> intv(3);
     std::cout << "Capacity : " << intv.capacity() << std::endl;
     intv.push_back(5);
     intv.push_back(5);
@@ -14,14 +14,14 @@ int main() {
 
     std::cout << std::endl;
 
-    my_vector intvv(intv);
+    my_std_vector intvv(intv);
     intvv.push_back(10);
     intvv.print();
     intv.print();
 
     std::cout << std::endl;
 
-    my_vector<std::string> strv(2);
+    my_std_vector<std::string> strv(2);
     strv.push_back("Hello");
     strv.push_back("World");
     strv.push_back("!!");
