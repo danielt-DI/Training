@@ -13,7 +13,7 @@ struct my_struct {
 
 int main() {
 
-    my_std_vector<int> intv(3);
+    my_vector<int> intv(3);
     std::cout << "Capacity : " << intv.capacity() << std::endl;
     intv.push_back(5);
     intv.push_back(5);
@@ -24,27 +24,20 @@ int main() {
 
     std::cout << std::endl;
 
-    my_std_vector intvv(intv);
+    my_vector intvv(intv);
     intvv.push_back(10);
     intvv.print();
     intv.print();
 
     std::cout << std::endl;
 
-    my_std_vector<std::string> strv(2);
+    my_vector<std::string> strv(2);
     strv.push_back("Hello");
     strv.push_back("World");
     strv.push_back("!!");
     strv.print();
 
     std::cout << std::endl;
-
-    my_vector<my_struct> structv;
-    structv.push_back({"my age is : ", 3});
-
-    structv.print();
-    std::cout << std::endl;
-
 
     std::cout << "Finished" << std::endl;
 
