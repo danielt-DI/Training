@@ -18,6 +18,9 @@ public:
     // constructor
     file_handler(fs::path p) {fh_fstream.open(p.string(), std::ios::out | std::ios::in | std::ios::trunc);}
 
+    // destructor
+    virtual ~file_handler() { if(fh_fstream.is_open()) {fh_fstream.close();}}
+
     // file handler interface
     void open(const std::string &filename,std::ios_base::openmode mode = std::ios_base::in|std::ios_base::out) {fh_fstream.open(filename, mode);}
     bool is_open() { return fh_fstream.is_open();};
