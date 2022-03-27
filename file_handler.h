@@ -16,7 +16,7 @@ class file_handler {
 
 public:
     // constructor
-    file_handler(fs::path p) {fh_fstream.open(p.string(), std::ios::out | std::ios::in | std::ios::trunc);}
+    file_handler(fs::path p);
 
 <<<<<<< HEAD
     // destructor
@@ -38,6 +38,11 @@ public:
 
     std::ostream& operator<<(const char* s) {fh_fstream << s << std::endl; return fh_fstream;}
 };
+
+file_handler::file_handler(fs::path p) {
+    fh_fstream.open(p.string(), std::ios::out | std::ios::in | std::ios::trunc);
+
+}
 
 
 #endif //CPP_TRAINING_FILE_HANDLER_H
