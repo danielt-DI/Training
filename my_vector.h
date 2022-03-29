@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <memory>
+#include <algorithm>
 
 #ifndef CPP_TRAINING_MY_VECTOR_H
 #define CPP_TRAINING_MY_VECTOR_H
@@ -16,7 +17,7 @@ class my_vector {
 
 public:
     // constructor
-    my_vector(int capacity): vec_capacity(capacity), vec_size(0), buff(std::make_unique<T[]>(capacity)) {}
+    my_vector(int capacity = 1): vec_capacity(capacity), vec_size(0), buff(std::make_unique<T[]>(capacity)) {}
 
     // copy constructor
     my_vector(const my_vector& vec);
@@ -27,12 +28,15 @@ public:
     // move constructor
     my_vector(my_vector&& vec);
 
+    // move assignment operator
+    my_vector& operator=(const my_vector&& vec);
+
     // destructor
     //virtual ~my_vector(); - removed, buff is now a smart pointer.
 
     // vector interface
-    int size() {return vec_size;}
-    int capacity() {return vec_capacity;}
+    int size() const {return vec_size;}
+    int capacity() const {return vec_capacity;}
     void push_back(T elem);
     void print();
 };
@@ -40,12 +44,10 @@ public:
 // copy constructor
 template <typename T>
 my_vector<T>::my_vector(const my_vector &vec): vec_capacity(vec.vec_capacity), vec_size(vec.vec_size), buff(std::make_unique<T[]>(vec.vec_capacity)) {
-    for(int i = 0; i < vec_size; i++) {
-        buff[i] = vec.buff[i];
-    }
+    std::copy(vec.buff.get(), std::next(vec.buff.get(), vec.vec_size), buff.get());
 }
 
-// assignment operator
+// copy assignment operator
 template <typename T>
 my_vector<T>& my_vector<T>::operator=(const my_vector &vec) {
     vec_size = vec.vec_size;
@@ -53,14 +55,21 @@ my_vector<T>& my_vector<T>::operator=(const my_vector &vec) {
     buff.reset();
     buff = std::make_unique<T[]>(vec.vec_capacity);
 
-    for(int i = 0; i < vec_size; i++) {
-        buff[i] = vec.buff[i];
-    }
+    std::copy(vec.buff.get(), std::next(vec.buff.get(), vec.vec_size), buff.get());
 }
 
 // move constructor
 template <typename T>
-my_vector<T>::my_vector(my_vector &&vec):vec_size(vec.vec_size), vec_capacity(vec.vec_capacity), buff(std::make_unique<T[]>(vec.vec_capacity)) {
+my_vector<T>::my_vector(my_vector &&vec):vec_size(vec.vec_size), vec_capacity(vec.vec_capacity), buff(buff = vec.buff) {
+    vec.buff = nullptr;
+}
+
+// move assignment operator
+template <typename T>
+my_vector<T>& my_vector<T>::operator=(const my_vector &&vec) {
+    vec_size = vec.vec_size;
+    vec_capacity = vec.vec_capacity;
+    buff = vec.buff;
     vec.buff = nullptr;
 }
 
@@ -71,9 +80,7 @@ void my_vector<T>::push_back(T elem) {
         vec_capacity *= 2;
         std::unique_ptr<T[]> tmp = std::make_unique<T[]>(vec_capacity);
 
-        for(int i = 0; i < vec_size; i++) {
-            tmp[i] = buff[i];
-        }
+        std::copy(buff.get(), std::next(buff.get(), vec_size), tmp.get());
 
         buff.reset();
 
